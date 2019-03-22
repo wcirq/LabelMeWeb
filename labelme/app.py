@@ -248,10 +248,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         close = action('&关闭', self.closeFile, shortcuts['close'], 'close',
                        '关闭当前文件')
-        color1 = action('标注 &线条颜色', self.chooseColor1,
+        color1 = action('线条颜色', self.chooseColor1,
                         shortcuts['edit_line_color'], 'color_line',
                         '选择多边形线的颜色')
-        color2 = action('标注 &填充颜色', self.chooseColor2,
+        color2 = action('填充颜色', self.chooseColor2,
                         shortcuts['edit_fill_color'], 'color',
                         '选择多边形填充颜色')
 
@@ -322,7 +322,7 @@ class MainWindow(QtWidgets.QMainWindow):
                       shortcuts['duplicate_polygon'], 'copy',
                       '创建所选多边形的副本',
                       enabled=False)
-        undoLastPoint = action('撤消最后一点', self.canvas.undoLastPoint,
+        undoLastPoint = action('撤消最后一步', self.canvas.undoLastPoint,
                                shortcuts['undo_last_point'], 'undo',
                                '撤消上次绘制的点', enabled=False)
         addPoint = action('增加一个点', self.canvas.addPointToEdge,
@@ -332,10 +332,10 @@ class MainWindow(QtWidgets.QMainWindow):
         undo = action('撤销', self.undoShapeEdit, shortcuts['undo'], 'undo',
                       '撤消上次添加和编辑形状', enabled=False)
 
-        hideAll = action('&隐藏\n多边形',
+        hideAll = action('&隐藏\n标记',
                          functools.partial(self.togglePolygons, False),
                          icon='eye', tip='隐藏所有多边形', enabled=False)
-        showAll = action('&显示\n多边形',
+        showAll = action('&显示\n标记',
                          functools.partial(self.togglePolygons, True),
                          icon='eye', tip='显示所有多边形', enabled=False)
 
@@ -388,7 +388,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.MANUAL_ZOOM: lambda: 1,
         }
 
-        edit = action('&编辑 标签', self.editLabel, shortcuts['edit_label'],
+        edit = action('&修改类别', self.editLabel, shortcuts['edit_label'],
                       'edit', '修改所选多边形的标签',
                       enabled=False)
 
