@@ -5,6 +5,9 @@ import os.path as osp
 import re
 import webbrowser
 
+import cv2
+import numpy as np
+
 import qimage2ndarray as qimage2ndarray
 from qtpy import QtCore
 from qtpy.QtCore import Qt
@@ -1738,6 +1741,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.openNextImgByWeb(load=load)
         print()
 
+    def img2pixmap(self, image):
+        Y, X = image.shape[:2]
+        self._bgra = np.zeros((Y, X, 4), dtype=np.uint8, order='C')
+        self._bgra[..., 0] = image[..., 2]
+        self._bgra[..., 1] = image[..., 1]
+        self._bgra[..., 2] = image[..., 0]
+        qimage = QtGui.QImage(self._bgra.data, X, Y, QtGui.QImage.Format_RGB32)
+        pixmap = QtGui.QPixmap.fromImage(qimage)
+        return pixmap
+
     def mouseMoveEvent(self, event):
         """
         Canvas 类的鼠标移动事件回调
@@ -1745,5 +1758,72 @@ class MainWindow(QtWidgets.QMainWindow):
         :return:
         """
         image = self.labelFile.image_numpy
-        # print(event.pos().x(), event.pos().y())
+        # image = image[:, :, ::-1]
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        h, w = image.shape[:2]
+        offsetsX = self.canvas.offsets[0].x()
+        offsetsY = self.canvas.offsets[1].y()
+
+        x = min(max(self.canvas.prevMovePoint.x(), 0), w)
+        y = min(max(self.canvas.prevMovePoint.y(), 0), h)
+
+        color = (255, 255, 0)
+        r, g, b = image[max(min(y, h - 1), 1), max(min(x, w - 1), 1), :]
+        Y = ((r * 299) + (g * 587) + (b * 114)) / 1000
+        # if 0 < Y < 255:
+        #     h, s, v = cv2.cvtColor(np.array([r, g, b], np.uint8).reshape((1, 1, 3)), cv2.COLOR_RGB2HSV)[0, 0, :]
+        #     h = h + 384
+        #     if h > 864:
+        #         h = h - 864
+        #     v = 256 - v
+        #     r, g, b = cv2.cvtColor(np.array([h, s, v], np.uint8).reshape((1, 1, 3)), cv2.COLOR_HSV2RGB)[0, 0, :]
+        #     color = (int(255 - r), int(255 - g), int(255 - b))
+        # else:
+        #     if Y > 127:
+        #         color = (0, 0, 0)
+        #     else:
+        #         color = (255, 255, 255)
+        #
+        # print(color)
+        if Y > 125:
+            color = (0, 0, 0)
+        else:
+            color = (255, 255, 255)
+
+        side = 100
+        paddingXL = 0
+        paddingXR = side*2
+        paddingYT = 0
+        paddingYB = side*2
+        if (w - side) >= x >= side and (h - side) >= y >= side:
+            image = image[y - side:y + side, x - side:x + side, :]
+            cv2.circle(image, (side, side), 10, color, 2)
+            cv2.circle(image, (side, side), 2, color, 1)
+
+        else:
+            image_zero = np.zeros((side * 2, side * 2, 3), np.uint8)
+            image = image[max(y - side, 0):min(y + side, h), max(x - side, 0):min(x + side, w), :]
+            if x < side:
+                paddingXL = side - x
+                paddingXR = side * 2
+            if x > w - side:
+                paddingXL = 0
+                paddingXR = side * 2 - (x - (w - side))
+            if y < side:
+                paddingYT = side - y
+                paddingYB = side * 2
+            if y > h - side:
+                paddingYT = 0
+                paddingYB = side * 2 - (y - (h - side))
+            image_zero[paddingYT:paddingYB, paddingXL:paddingXR, :] = image
+            cv2.circle(image_zero, (side, side), 10, color, 2)
+            cv2.circle(image_zero, (side, side), 2, color, 1)
+            image = image_zero
+
+        # image = image[max(min(y-100, h), 0):max(min(y+100, h), 0), max(min(x-100, w), 0):max(min(x+100, w), 0), :]
+        print(image.shape)
+        self.expand_widget.setPixmap(self.img2pixmap(image))
+
+        print(offsetsX, offsetsY, x, y)
+        print(event.pos().x(), event.pos().y())
 
