@@ -1745,5 +1745,5 @@ class MainWindow(QtWidgets.QMainWindow):
         :return:
         """
         image = self.labelFile.image_numpy
-        print(event.pos().x(), event.pos().y())
+        # print(event.pos().x(), event.pos().y())
 
