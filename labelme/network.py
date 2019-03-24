@@ -1,7 +1,9 @@
 import json
 import requests
 
-URL = 'http://127.0.0.1:12345/xiaoi/{}'
+# URL = 'http://127.0.0.1:12345/xiaoi/{}'
+URL = 'http://222.85.230.14:12345/xiaoi/{}'
+
 
 def post(request_url, data=None):
     global URL

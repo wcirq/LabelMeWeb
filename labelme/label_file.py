@@ -25,6 +25,7 @@ class LabelFile(object):
         self.shapes = ()
         self.imagePath = None
         self.imageData = None
+        self.image_numpy = None
 
         if isinstance(filename, list):
             if filename is not None:
@@ -106,43 +107,71 @@ class LabelFile(object):
                     if key not in keys:
                         otherData[key] = value
             elif isinstance(filename, list):
-                data = filename[1]
-                result = post("get_image_by_path", data={"image_path":filename[0]})
-                image = result["image"]
-                imageData = base64.b64decode(image)
+                # data = filename[1]
+                data = post("get_lable_by_path", data={"image_path":filename[0]})
+                data = json.loads(data["label"])
+                if data['imageData'] is not None:
+                    imageData = base64.b64decode(data['imageData'])
+                    if PY2 and QT4:
+                        imageData = utils.img_data_to_png_data(imageData)
+                else:
+                    result = post("get_image_by_path", data={"image_path": filename[0]})
+                    image = result["image"]
+                    imageData = base64.b64decode(image)
                 image_numpy = np.asarray(bytearray(imageData), dtype="uint8")
                 self.image_numpy = cv2.imdecode(image_numpy, cv2.IMREAD_COLOR)
                 height, width = self.image_numpy.shape[:2]
-                # imageData = PIL.Image.fromarray(image)
-                for s in data:
-                    type = s["type"]
-                    tag = s["tag"]
-                    label = ""
-                    if type == 0:
-                        label = "笔杆"
-                    elif type == 1:
-                        label = "手掌"
-                    elif type == 2:
-                        label = "表格"
-                    points = []
-                    if type < 2:
-                        points.append([int(tag[0]*width+0.5), int(tag[1]*height+0.5)])
-                        points.append([int(tag[2]*width+0.5), int(tag[3]*height+0.5)])
-                    line_color = None
-                    fill_color = None
-                    shape_type = ""
-                    if type == 0:
-                        shape_type = "line"
-                    elif type == 1:
-                        shape_type = "rectangle"
-                    elif type == 2:
-                        shape_type = "polygon"
+
+                flags = data.get('flags')
+                imagePath = data['imagePath']
+                self._check_image_height_and_width(
+                    base64.b64encode(imageData).decode('utf-8'),
+                    data.get('imageHeight'),
+                    data.get('imageWidth'),
+                )
+                lineColor = data['lineColor']
+                fillColor = data['fillColor']
+                for s in data['shapes']:
+                    label = s['label']
+                    points = s['points']
+                    line_color = s['line_color']
+                    fill_color = s['fill_color']
+                    shape_type = s.get('shape_type', 'polygon')
                     shapes.append([label, points, line_color, fill_color, shape_type])
-                flags = {}
-                imagePath = None
-                lineColor = None
-                fillColor = None
-                filename = None
+
+                for key, value in data.items():
+                    if key not in keys:
+                        otherData[key] = value
+                # imageData = PIL.Image.fromarray(image)
+                # for s in data:
+                #     type = s["type"]
+                #     tag = s["tag"]
+                #     label = ""
+                #     if type == 0:
+                #         label = "笔杆"
+                #     elif type == 1:
+                #         label = "手掌"
+                #     elif type == 2:
+                #         label = "表格"
+                #     points = []
+                #     if type < 2:
+                #         points.append([int(tag[0]*width+0.5), int(tag[1]*height+0.5)])
+                #         points.append([int(tag[2]*width+0.5), int(tag[3]*height+0.5)])
+                #     line_color = None
+                #     fill_color = None
+                #     shape_type = ""
+                #     if type == 0:
+                #         shape_type = "line"
+                #     elif type == 1:
+                #         shape_type = "rectangle"
+                #     elif type == 2:
+                #         shape_type = "polygon"
+                #     shapes.append([label, points, line_color, fill_color, shape_type])
+                # flags = {}
+                # imagePath = None
+                # lineColor = None
+                # fillColor = None
+                # filename = None
         except Exception as e:
             raise LabelFileError(e)
 
@@ -211,6 +240,50 @@ class LabelFile(object):
         try:
             with open(filename, 'wb' if PY2 else 'w') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
+            self.filename = filename
+        except Exception as e:
+            raise LabelFileError(e)
+
+    def save_to_web(
+            self,
+            filename,
+            shapes,
+            imagePath,
+            imageHeight,
+            imageWidth,
+            imageData=None,
+            lineColor=None,
+            fillColor=None,
+            otherData=None,
+            flags=None,
+    ):
+        if imageData is not None:
+            imageData = base64.b64encode(imageData).decode('utf-8')
+            imageHeight, imageWidth = self._check_image_height_and_width(
+                imageData, imageHeight, imageWidth
+            )
+        if otherData is None:
+            otherData = {}
+        if flags is None:
+            flags = {}
+        data = dict(
+            version=__version__,
+            flags=flags,
+            shapes=shapes,
+            lineColor=lineColor,
+            fillColor=fillColor,
+            imagePath=imagePath,
+            imageData=imageData,
+            imageHeight=imageHeight,
+            imageWidth=imageWidth,
+        )
+        for key, value in otherData.items():
+            data[key] = value
+        try:
+            image_path = filename
+            image_label = json.dumps(data)
+            data = {"image_path": image_path, "image_label":image_label}
+            post("save_lable_by_path", data)
             self.filename = filename
         except Exception as e:
             raise LabelFileError(e)

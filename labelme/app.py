@@ -8,7 +8,6 @@ import webbrowser
 import cv2
 import numpy as np
 
-import qimage2ndarray as qimage2ndarray
 from qtpy import QtCore
 from qtpy.QtCore import Qt
 from qtpy import QtGui
@@ -194,10 +193,10 @@ class MainWindow(QtWidgets.QMainWindow):
         shortcuts = self._config['shortcuts']
         quit = action('&退出', self.close, shortcuts['quit'], 'quit',
                       '退出应用')
-        open_ = action('&打开', self.openFile, shortcuts['open'], 'open',
-                       '打开图像或标签文件')
-        opendir = action('&打开文件夹', self.openDirDialog,
-                         shortcuts['open_dir'], 'open', u'打开文件夹')
+        # open_ = action('&打开', self.openFile, shortcuts['open'], 'open',
+        #                '打开图像或标签文件')
+        # opendir = action('&打开文件夹', self.openDirDialog,
+        #                  shortcuts['open_dir'], 'open', u'打开文件夹')
         openNextImg = action(
             '&下一张',
             self.openNextImg,
@@ -214,7 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
             u'打开前一张(按住Ctl+Shift键复制标签)',
             enabled=False,
         )
-        save = action('&保存', self.saveFile, shortcuts['save'], 'save',
+        save = action('&保存', self.saveFileByWeb, shortcuts['save'], 'save',
                       '保存标签到文件', enabled=False)
         saveAs = action('&另存为', self.saveFileAs, shortcuts['save_as'],
                         'save-as', '保存标签到另一个文件',
@@ -420,7 +419,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actions = utils.struct(
             saveAuto=saveAuto,
             changeOutputDir=changeOutputDir,
-            save=save, saveAs=saveAs, open=open_, close=close,
+            save=save, close=close,
             deleteFile=deleteFile,
             lineColor=color1, fillColor=color2,
             toggleKeepPrevMode=toggle_keep_prev_mode,
@@ -438,7 +437,7 @@ class MainWindow(QtWidgets.QMainWindow):
             fitWindow=fitWindow, fitWidth=fitWidth,
             zoomActions=zoomActions,
             openNextImg=openNextImg, openPrevImg=openPrevImg,
-            fileMenuActions=(open_, opendir, save, saveAs, close, quit),
+            fileMenuActions=(save, close, quit),
             tool=(),
             editMenu=(edit, copy, delete, None, undo, undoLastPoint,
                       None, color1, color2, None, toggle_keep_prev_mode),
@@ -470,7 +469,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 createLineStripMode,
                 editMode,
             ),
-            onShapesPresent=(saveAs, hideAll, showAll),
+            onShapesPresent=(hideAll, showAll),
         )
 
         self.canvas.edgeSelected.connect(self.actions.addPoint.setEnabled)
@@ -487,13 +486,10 @@ class MainWindow(QtWidgets.QMainWindow):
         utils.addActions(
             self.menus.file,
             (
-                open_,
                 openNextImg,
                 openPrevImg,
-                opendir,
                 self.menus.recentFiles,
                 save,
-                saveAs,
                 saveAuto,
                 changeOutputDir,
                 close,
@@ -542,8 +538,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tools = self.toolbar('Tools')
         # Menu buttons on Left
         self.actions.tool = (
-            open_,
-            opendir,
             openNextImg,
             openPrevImg,
             save,
@@ -987,9 +981,9 @@ class MainWindow(QtWidgets.QMainWindow):
             imagePath = osp.relpath(
                 self.imagePath, osp.dirname(filename))
             imageData = self.imageData if self._config['store_data'] else None
-            if osp.dirname(filename) and not osp.exists(osp.dirname(filename)):
-                os.makedirs(osp.dirname(filename))
-            lf.save(
+            # if osp.dirname(filename) and not osp.exists(osp.dirname(filename)):
+            #     os.makedirs(osp.dirname(filename))
+            lf.save_to_web(
                 filename=filename,
                 shapes=shapes,
                 imagePath=imagePath,
@@ -1001,7 +995,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 otherData=self.otherData,
                 flags=flags,
             )
-            self.labelFile = lf
+            # self.labelFile = lf
             items = self.fileListWidget.findItems(
                 self.imagePath, Qt.MatchExactly
             )
@@ -1470,6 +1464,7 @@ class MainWindow(QtWidgets.QMainWindow):
                              mb.Save | mb.Discard | mb.Cancel,
                              mb.Save)
         if answer == mb.Discard:
+            self.dirty = False
             return True
         elif answer == mb.Save:
             self.saveFile()
@@ -1734,7 +1729,11 @@ class MainWindow(QtWidgets.QMainWindow):
             item = QtWidgets.QListWidgetItem(filename)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             if label:
-                item.setCheckState(Qt.Checked)  # 如果有标签文件，则勾选
+                label = json.loads(label)
+                if len(label["shapes"]) != 0:
+                    item.setCheckState(Qt.Checked)  # 如果有标签文件，则勾选
+                else:
+                    item.setCheckState(Qt.Unchecked)
             else:
                 item.setCheckState(Qt.Unchecked)
             self.fileListWidget.addItem(item)
@@ -1758,72 +1757,80 @@ class MainWindow(QtWidgets.QMainWindow):
         :return:
         """
         image = self.labelFile.image_numpy
-        # image = image[:, :, ::-1]
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        h, w = image.shape[:2]
-        offsetsX = self.canvas.offsets[0].x()
-        offsetsY = self.canvas.offsets[1].y()
+        if not image is None:
+            # image = image[:, :, ::-1]
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            h, w = image.shape[:2]
+            offsetsX = self.canvas.offsets[0].x()
+            offsetsY = self.canvas.offsets[1].y()
 
-        x = min(max(self.canvas.prevMovePoint.x(), 0), w)
-        y = min(max(self.canvas.prevMovePoint.y(), 0), h)
+            x = min(max(self.canvas.prevMovePoint.x(), 0), w)
+            y = min(max(self.canvas.prevMovePoint.y(), 0), h)
 
-        color = (255, 255, 0)
-        r, g, b = image[max(min(y, h - 1), 1), max(min(x, w - 1), 1), :]
-        Y = ((r * 299) + (g * 587) + (b * 114)) / 1000
-        # if 0 < Y < 255:
-        #     h, s, v = cv2.cvtColor(np.array([r, g, b], np.uint8).reshape((1, 1, 3)), cv2.COLOR_RGB2HSV)[0, 0, :]
-        #     h = h + 384
-        #     if h > 864:
-        #         h = h - 864
-        #     v = 256 - v
-        #     r, g, b = cv2.cvtColor(np.array([h, s, v], np.uint8).reshape((1, 1, 3)), cv2.COLOR_HSV2RGB)[0, 0, :]
-        #     color = (int(255 - r), int(255 - g), int(255 - b))
-        # else:
-        #     if Y > 127:
-        #         color = (0, 0, 0)
-        #     else:
-        #         color = (255, 255, 255)
-        #
-        # print(color)
-        if Y > 125:
-            color = (0, 0, 0)
-        else:
-            color = (255, 255, 255)
+            color = (255, 255, 0)
+            r, g, b = image[max(min(y, h - 1), 1), max(min(x, w - 1), 1), :]
+            Y = ((r * 299) + (g * 587) + (b * 114)) / 1000
+            # if 0 < Y < 255:
+            #     h, s, v = cv2.cvtColor(np.array([r, g, b], np.uint8).reshape((1, 1, 3)), cv2.COLOR_RGB2HSV)[0, 0, :]
+            #     h = h + 384
+            #     if h > 864:
+            #         h = h - 864
+            #     v = 256 - v
+            #     r, g, b = cv2.cvtColor(np.array([h, s, v], np.uint8).reshape((1, 1, 3)), cv2.COLOR_HSV2RGB)[0, 0, :]
+            #     color = (int(255 - r), int(255 - g), int(255 - b))
+            # else:
+            #     if Y > 127:
+            #         color = (0, 0, 0)
+            #     else:
+            #         color = (255, 255, 255)
+            #
+            # print(color)
+            if Y > 125:
+                color = (0, 0, 0)
+            else:
+                color = (255, 255, 255)
 
-        side = 100
-        paddingXL = 0
-        paddingXR = side*2
-        paddingYT = 0
-        paddingYB = side*2
-        if (w - side) >= x >= side and (h - side) >= y >= side:
-            image = image[y - side:y + side, x - side:x + side, :]
-            cv2.circle(image, (side, side), 10, color, 2)
-            cv2.circle(image, (side, side), 2, color, 1)
+            side = 100
+            paddingXL = 0
+            paddingXR = side * 2
+            paddingYT = 0
+            paddingYB = side * 2
+            if (w - side) >= x >= side and (h - side) >= y >= side:
+                image = image[y - side:y + side, x - side:x + side, :]
+                cv2.circle(image, (side, side), 10, color, 2)
+                cv2.circle(image, (side, side), 2, color, 1)
 
-        else:
-            image_zero = np.zeros((side * 2, side * 2, 3), np.uint8)
-            image = image[max(y - side, 0):min(y + side, h), max(x - side, 0):min(x + side, w), :]
-            if x < side:
-                paddingXL = side - x
-                paddingXR = side * 2
-            if x > w - side:
-                paddingXL = 0
-                paddingXR = side * 2 - (x - (w - side))
-            if y < side:
-                paddingYT = side - y
-                paddingYB = side * 2
-            if y > h - side:
-                paddingYT = 0
-                paddingYB = side * 2 - (y - (h - side))
-            image_zero[paddingYT:paddingYB, paddingXL:paddingXR, :] = image
-            cv2.circle(image_zero, (side, side), 10, color, 2)
-            cv2.circle(image_zero, (side, side), 2, color, 1)
-            image = image_zero
+            else:
+                image_zero = np.zeros((side * 2, side * 2, 3), np.uint8)
+                image = image[max(y - side, 0):min(y + side, h), max(x - side, 0):min(x + side, w), :]
+                if x < side:
+                    paddingXL = side - x
+                    paddingXR = side * 2
+                if x > w - side:
+                    paddingXL = 0
+                    paddingXR = side * 2 - (x - (w - side))
+                if y < side:
+                    paddingYT = side - y
+                    paddingYB = side * 2
+                if y > h - side:
+                    paddingYT = 0
+                    paddingYB = side * 2 - (y - (h - side))
+                image_zero[paddingYT:paddingYB, paddingXL:paddingXR, :] = image
+                cv2.circle(image_zero, (side, side), 10, color, 2)
+                cv2.circle(image_zero, (side, side), 2, color, 1)
+                image = image_zero
 
-        # image = image[max(min(y-100, h), 0):max(min(y+100, h), 0), max(min(x-100, w), 0):max(min(x+100, w), 0), :]
-        print(image.shape)
-        self.expand_widget.setPixmap(self.img2pixmap(image))
+            # image = image[max(min(y-100, h), 0):max(min(y+100, h), 0), max(min(x-100, w), 0):max(min(x+100, w), 0), :]
+            self.expand_widget.setPixmap(self.img2pixmap(image))
 
-        print(offsetsX, offsetsY, x, y)
-        print(event.pos().x(), event.pos().y())
-
+    def saveFileByWeb(self, _value=False):
+        assert not self.image.isNull(), "无法保存空图片"
+        if self._config['flags'] or self.hasLabels():
+            if self.labelFile:
+                # DL20180323 - overwrite when in directory
+                self._saveFile(self.labelFile.filename)
+            elif self.output_file:
+                self._saveFile(self.output_file)
+                self.close()
+            else:
+                self._saveFile(self.saveFileDialog())
