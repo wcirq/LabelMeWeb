@@ -117,13 +117,6 @@ def _main():
         else:
             args.flags = [l for l in args.flags.split(',') if l]
 
-    if hasattr(args, 'labels'):
-        if os.path.isfile(args.labels):
-            with codecs.open(args.labels, 'r', encoding='utf-8') as f:
-                args.labels = [l.strip() for l in f if l.strip()]
-        else:
-            args.labels = [l for l in args.labels.split(',') if l]
-
     config_from_args = args.__dict__
     config_from_args.pop('version')
     reset_config = config_from_args.pop('reset_config')
@@ -131,18 +124,23 @@ def _main():
     output = config_from_args.pop('output')
     config_file = config_from_args.pop('config_file')
     config = get_config(config_from_args, config_file)
-    if not config["labels"] is None:
-        if os.path.isfile(config["labels"]):
-            with codecs.open(config["labels"], 'r', encoding='utf-8') as f:
-                config["labels"] = [l.strip() for l in f if l.strip()]
-        else:
-            config["labels"] = [l for l in args.labels.split(',') if l]
 
-    if not config['labels'] and config['validate_label']:
-        logger.error('--labels must be specified with --validatelabel or '
-                     'validate_label: true in the config file '
-                     '(ex. ~/.labelmerc).')
-        sys.exit(1)
+    if os.path.isfile('labelme/config/labels.txt'):
+        with codecs.open('labelme/config/labels.txt', 'r', encoding='utf-8') as f:
+            config["labels"] = [l.strip() for l in f if l.strip()]
+            print(config["labels"])
+    # if not config["labels"] is None:
+    #     if os.path.isfile(config["labels"]):
+    #         with codecs.open(config["labels"], 'r', encoding='utf-8') as f:
+    #             config["labels"] = [l.strip() for l in f if l.strip()]
+    #     else:
+    #         config["labels"] = [l for l in args.labels.split(',') if l]
+
+    # if not config['labels'] and config['validate_label']:
+    #     logger.error('--labels must be specified with --validatelabel or '
+    #                  'validate_label: true in the config file '
+    #                  '(ex. ~/.labelmerc).')
+    #     sys.exit(1)
 
     output_file = None
     output_dir = None
