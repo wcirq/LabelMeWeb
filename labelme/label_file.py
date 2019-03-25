@@ -35,6 +35,7 @@ class LabelFile(object):
             if filename is not None:
                 self.load(filename)
             self.filename = filename
+
     @staticmethod
     def load_image_file(filename):
         try:
@@ -108,7 +109,7 @@ class LabelFile(object):
                         otherData[key] = value
             elif isinstance(filename, list):
                 # data = filename[1]
-                data = post("get_lable_by_path", data={"image_path":filename[0]})
+                data = post("get_lable_by_path", data={"image_path": filename[0]})
                 data = json.loads(data["label"])
                 if data['imageData'] is not None:
                     imageData = base64.b64decode(data['imageData'])
@@ -134,10 +135,14 @@ class LabelFile(object):
                 for s in data['shapes']:
                     label = s['label']
                     points = s['points']
+                    if "visible" in s.keys():
+                        visibles = s['visible']
+                    else:
+                        visibles = [1] * len(points)
                     line_color = s['line_color']
                     fill_color = s['fill_color']
                     shape_type = s.get('shape_type', 'polygon')
-                    shapes.append([label, points, line_color, fill_color, shape_type])
+                    shapes.append([label, points, visibles, line_color, fill_color, shape_type])
 
                 for key, value in data.items():
                     if key not in keys:
@@ -256,6 +261,7 @@ class LabelFile(object):
             fillColor=None,
             otherData=None,
             flags=None,
+            callback=None,
     ):
         if imageData is not None:
             imageData = base64.b64encode(imageData).decode('utf-8')
@@ -266,7 +272,7 @@ class LabelFile(object):
             otherData = {}
         if flags is None:
             flags = {}
-        data = dict(
+        image_label = dict(
             version=__version__,
             flags=flags,
             shapes=shapes,
@@ -278,14 +284,18 @@ class LabelFile(object):
             imageWidth=imageWidth,
         )
         for key, value in otherData.items():
-            data[key] = value
+            image_label[key] = value
         try:
             image_path = filename
-            image_label = json.dumps(data)
-            data = {"image_path": image_path, "image_label":image_label}
-            post("save_lable_by_path", data)
+            data = {"image_path": image_path, "image_label": image_label}
+            res = post("save_lable_by_path", data)
+            if res["state"] == 1:
+                callback("标签保存成功！")
+            else:
+                callback("标签保存失败！")
             self.filename = filename
         except Exception as e:
+            print(e)
             raise LabelFileError(e)
 
     @staticmethod

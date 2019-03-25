@@ -303,7 +303,7 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         createLineStripMode = action(
-            '描边',
+            '线条',
             lambda: self.toggleDrawMode(False, createMode='linestrip'),
             shortcuts['create_linestrip'],
             'objects',
@@ -367,11 +367,11 @@ class MainWindow(QtWidgets.QMainWindow):
                          functools.partial(self.setZoom, 100),
                          shortcuts['zoom_to_original'], 'zoom',
                          '缩放到原始大小', enabled=False)
-        fitWindow = action('&合适的窗口', self.setFitWindow,
+        fitWindow = action('&适应窗口', self.setFitWindow,
                            shortcuts['fit_window'], 'fit-window',
                            '跟随窗口大小缩放', checkable=True,
                            enabled=False)
-        fitWidth = action('合适的宽度', self.setFitWidth,
+        fitWidth = action('适应宽度', self.setFitWidth,
                           shortcuts['fit_width'], 'fit-width',
                           '跟随窗口缩放宽度',
                           checkable=True, enabled=False)
@@ -418,7 +418,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Store actions for further handling.
         self.actions = utils.struct(
             saveAuto=saveAuto,
-            changeOutputDir=changeOutputDir,
             save=save, close=close,
             deleteFile=deleteFile,
             lineColor=color1, fillColor=color2,
@@ -488,10 +487,9 @@ class MainWindow(QtWidgets.QMainWindow):
             (
                 openNextImg,
                 openPrevImg,
-                self.menus.recentFiles,
+                # self.menus.recentFiles,
                 save,
                 saveAuto,
-                changeOutputDir,
                 close,
                 deleteFile,
                 None,
@@ -667,10 +665,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def setDirty(self):
         if self._config['auto_save'] or self.actions.saveAuto.isChecked():
-            label_file = osp.splitext(self.imagePath)[0] + '.json'
-            if self.output_dir:
-                label_file = osp.join(self.output_dir, label_file)
-            self.saveLabels(label_file)
+            self.saveLabels(self.imagePath)
             return
         self.dirty = True
         self.actions.save.setEnabled(True)
@@ -710,6 +705,12 @@ class MainWindow(QtWidgets.QMainWindow):
         QtCore.QTimer.singleShot(0, function)
 
     def status(self, message, delay=5000):
+        """
+        向最下方添加消息
+        :param message:
+        :param delay:
+        :return:
+        """
         self.statusBar().showMessage(message, delay)
 
     def resetState(self):
@@ -936,8 +937,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def loadLabels(self, shapes):
         s = []
-        for label, points, line_color, fill_color, shape_type in shapes:
+        for label, points, visibles, line_color, fill_color, shape_type in shapes:
             shape = Shape(label=label, shape_type=shape_type)
+            shape.visibles = visibles
             for x, y in points:
                 shape.addPoint(QtCore.QPoint(x, y))
             shape.close()
@@ -967,6 +969,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 fill_color=s.fill_color.getRgb()
                 if s.fill_color != self.fillColor else None,
                 points=[(p.x(), p.y()) for p in s.points],
+                visible=s.visibles,
                 shape_type=s.shape_type,
             )
 
@@ -994,15 +997,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 fillColor=self.fillColor.getRgb(),
                 otherData=self.otherData,
                 flags=flags,
+                callback=self.status
             )
-            # self.labelFile = lf
+            self.labelFile = lf
             items = self.fileListWidget.findItems(
                 self.imagePath, Qt.MatchExactly
             )
             if len(items) > 0:
                 if len(items) != 1:
                     raise RuntimeError('There are duplicate files.')
-                items[0].setCheckState(Qt.Checked)
+                if len(shapes) <= 0:
+                    items[0].setCheckState(Qt.Unchecked)
+                else:
+                    items[0].setCheckState(Qt.Checked)
             # disable allows next and previous image to proceed
             # self.filename = filename
             return True
@@ -1666,12 +1673,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.loadPixmap(QtGui.QPixmap.fromImage(image))
         if self._config['flags']:
             self.loadFlags({k: False for k in self._config['flags']})
-        if self._config['keep_prev']:
-            self.loadShapes(prev_shapes)
+
         if self.labelFile:
-            self.loadLabels(self.labelFile.shapes)
-            if self.labelFile.flags is not None:
-                self.loadFlags(self.labelFile.flags)
+            if self._config['keep_prev'] and len(self.labelFile.shapes) == 0:
+                self.loadShapes(prev_shapes)
+            else:
+                self.loadLabels(self.labelFile.shapes)
+                if self.labelFile.flags is not None:
+                    self.loadFlags(self.labelFile.flags)
         self.setClean()
         self.canvas.setEnabled(True)
         self.adjustScale(initial=True)
@@ -1797,8 +1806,8 @@ class MainWindow(QtWidgets.QMainWindow):
             paddingYB = side * 2
             if (w - side) >= x >= side and (h - side) >= y >= side:
                 image = image[y - side:y + side, x - side:x + side, :]
-                cv2.circle(image, (side, side), 10, color, 2)
-                cv2.circle(image, (side, side), 2, color, 1)
+                cv2.circle(image, (side, side), 15, color, 1)
+                cv2.circle(image, (side, side), 3, color, 1)
 
             else:
                 image_zero = np.zeros((side * 2, side * 2, 3), np.uint8)
@@ -1816,8 +1825,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     paddingYT = 0
                     paddingYB = side * 2 - (y - (h - side))
                 image_zero[paddingYT:paddingYB, paddingXL:paddingXR, :] = image
-                cv2.circle(image_zero, (side, side), 10, color, 2)
-                cv2.circle(image_zero, (side, side), 2, color, 1)
+                cv2.circle(image_zero, (side, side), 15, color, 1)
+                cv2.circle(image_zero, (side, side), 3, color, 1)
                 image = image_zero
 
             # image = image[max(min(y-100, h), 0):max(min(y+100, h), 0), max(min(x-100, w), 0):max(min(x+100, w), 0), :]

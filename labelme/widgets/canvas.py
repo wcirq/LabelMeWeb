@@ -6,7 +6,6 @@ from labelme import QT5
 from labelme.shape import Shape
 import labelme.utils
 
-
 # TODO(unknown):
 # - [maybe] Find optimal epsilon value.
 
@@ -19,7 +18,6 @@ CURSOR_GRAB = QtCore.Qt.OpenHandCursor
 
 
 class Canvas(QtWidgets.QWidget):
-
     zoomRequest = QtCore.Signal(int, QtCore.QPoint)
     scrollRequest = QtCore.Signal(int, int)
     newShape = QtCore.Signal()
@@ -86,7 +84,7 @@ class Canvas(QtWidgets.QWidget):
     @createMode.setter
     def createMode(self, value):
         if value not in ['polygon', 'rectangle', 'circle',
-           'line', 'point', 'linestrip']:
+                         'line', 'point', 'linestrip']:
             raise ValueError('Unsupported createMode: %s' % value)
         self._createMode = value
 
@@ -176,7 +174,7 @@ class Canvas(QtWidgets.QWidget):
                 # Don't allow the user to draw outside the pixmap.
                 # Project the point to the pixmap's edges.
                 pos = self.intersectionPoint(self.current[-1], pos)
-            elif len(self.current) > 1 and self.createMode == 'polygon' and\
+            elif len(self.current) > 1 and self.createMode == 'polygon' and \
                     self.closeEnough(pos, self.current[0]):
                 # Attract line to starting point and
                 # colorise to alert the user.
@@ -271,6 +269,10 @@ class Canvas(QtWidgets.QWidget):
         self.edgeSelected.emit(self.hEdge is not None)
 
     def addPointToEdge(self):
+        """
+        在边缘增加一个点
+        :return:
+        """
         if (self.hShape is None and
                 self.hEdge is None and
                 self.prevMovePoint is None):
@@ -279,44 +281,72 @@ class Canvas(QtWidgets.QWidget):
         index = self.hEdge
         point = self.prevMovePoint
         shape.insertPoint(index, point)
+        visible = 1  # 默认可见
+        shape.visibles.insert(index, visible)
         shape.highlightVertex(index, shape.MOVE_VERTEX)
         self.hShape = shape
         self.hVertex = index
         self.hEdge = None
 
     def mousePressEvent(self, ev):
+        """
+        鼠标按下时调用
+        :param ev:
+        :return:
+        """
         if QT5:
             pos = self.transformPos(ev.pos())
         else:
             pos = self.transformPos(ev.posF())
         if ev.button() == QtCore.Qt.LeftButton:
             if self.drawing():
+                visible = 1  # 默认可见
+                if int(ev.modifiers()) == QtCore.Qt.ALT:
+                    # 若按 ALT键则不可见
+                    visible = 0
                 if self.current:
                     # Add point to existing shape.
                     if self.createMode == 'polygon':
                         self.current.addPoint(self.line[1])
                         self.line[0] = self.current[-1]
+                        self.line.visibles = [visible, 1]
                         if self.current.isClosed():
                             self.finalise()
-                    elif self.createMode in ['rectangle', 'circle', 'line']:
+                        else:
+                            self.current.visibles.append(visible)
+                    elif self.createMode in ['rectangle', 'circle']:
                         assert len(self.current.points) == 1
                         self.current.points = self.line.points
+                        self.current.visibles = [1, 1]
+                        self.finalise()
+                    elif self.createMode in ['line']:
+                        assert len(self.current.points) == 1
+                        self.current.points = self.line.points
+                        self.current.visibles.append(visible)
                         self.finalise()
                     elif self.createMode == 'linestrip':
                         self.current.addPoint(self.line[1])
+                        self.current.visibles.append(visible)
                         self.line[0] = self.current[-1]
+                        self.line.visibles = [visible, 1]
                         if int(ev.modifiers()) == QtCore.Qt.ControlModifier:
                             self.finalise()
                 elif not self.outOfPixmap(pos):
                     # Create new shape.
                     self.current = Shape(shape_type=self.createMode)
                     self.current.addPoint(pos)
+                    if self.createMode in ['polygon', 'linestrip', 'line']:
+                        self.current.visibles.append(visible)
+                    else:
+                        self.current.visibles.append(1)
                     if self.createMode == 'point':
                         self.finalise()
                     else:
                         if self.createMode == 'circle':
                             self.current.shape_type = 'circle'
                         self.line.points = [pos, pos]
+                        if self.createMode in ['polygon', 'linestrip', 'line']:
+                            self.line.visibles = [visible, 1]
                         self.setHiding()
                         self.drawingPolygon.emit(True)
                         self.update()
@@ -330,11 +360,16 @@ class Canvas(QtWidgets.QWidget):
             self.repaint()
 
     def mouseReleaseEvent(self, ev):
+        """
+        鼠标释放事件
+        :param ev:
+        :return:
+        """
         if ev.button() == QtCore.Qt.RightButton:
             menu = self.menus[bool(self.selectedShapeCopy)]
             self.restoreCursor()
-            if not menu.exec_(self.mapToGlobal(ev.pos()))\
-               and self.selectedShapeCopy:
+            if not menu.exec_(self.mapToGlobal(ev.pos())) \
+                    and self.selectedShapeCopy:
                 # Cancel the move by deleting the shadow copy.
                 self.selectedShapeCopy = None
                 self.repaint()
@@ -391,7 +426,7 @@ class Canvas(QtWidgets.QWidget):
         self.update()
 
     def selectShapePoint(self, point):
-        """Select the first shape created which contains this point."""
+        """选择创建的包含此点的第一个形状."""
         self.deSelectShape()
         if self.selectedVertex():  # A vertex is marked for selection.
             index, shape = self.hVertex, self.hShape
@@ -510,7 +545,7 @@ class Canvas(QtWidgets.QWidget):
         if (self.fillDrawing() and self.createMode == 'polygon' and
                 self.current is not None and len(self.current.points) >= 2):
             drawing_shape = self.current.copy()
-            drawing_shape.addPoint(self.line[1])
+            drawing_shape.addPoint(self.line[1], 1)
             drawing_shape.fill = True
             drawing_shape.fill_color.setAlpha(64)
             drawing_shape.paint(p)
@@ -531,6 +566,11 @@ class Canvas(QtWidgets.QWidget):
         return QtCore.QPoint(x, y)
 
     def outOfPixmap(self, p):
+        """
+        判断鼠标是否在图片上
+        :param p:
+        :return:
+        """
         w, h = self.pixmap.width(), self.pixmap.height()
         return not (0 <= p.x() < w and 0 <= p.y() < h)
 
@@ -551,6 +591,13 @@ class Canvas(QtWidgets.QWidget):
         return labelme.utils.distance(p1 - p2) < self.epsilon
 
     def intersectionPoint(self, p1, p2):
+        """
+        以顺时针方式循环通过每个图像边缘，
+        并找到与当前线段相交的那条线。
+        :param p1:
+        :param p2:
+        :return:
+        """
         # Cycle through each image edge in clockwise fashion,
         # and find the one intersecting the current line segment.
         # http://paulbourke.net/geometry/lineline2d/

@@ -7,7 +7,9 @@
       <change beforePath="$PROJECT_DIR$/labelme/config/default_config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/config/default_config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/labelme/config/labels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/config/labels.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/labelme/label_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/label_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/labelme/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelme/shape.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/shape.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelme/testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/testing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/labelme/widgets/canvas.py" beforeDir="false" afterPath="$PROJECT_DIR$/labelme/widgets/canvas.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,87 +18,59 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/LabelMeWeb$app__1_.coverage" NAME="app (1) Coverage Results" MODIFIED="1553253213966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/labelme" />
     <SUITE FILE_PATH="coverage/LabelMeWeb$FloatingWindow.coverage" NAME="FloatingWindow Coverage Results" MODIFIED="1553253099907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/LabelMeWeb$main.coverage" NAME="main Coverage Results" MODIFIED="1553446129309" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/LabelMeWeb$main.coverage" NAME="main Coverage Results" MODIFIED="1553512996808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/LabelMeWeb$app.coverage" NAME="app Coverage Results" MODIFIED="1553222817113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/LabelMeWeb$app__1_.coverage" NAME="app (1) Coverage Results" MODIFIED="1553253213966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/labelme" />
+    <SUITE FILE_PATH="coverage/LabelMeWeb$testing.coverage" NAME="testing Coverage Results" MODIFIED="1553489612145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/labelme" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="872806488">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.21" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="jpg" value="1" />
-          <entry key="py" value="66" />
-          <entry key="txt" value="2" />
-          <entry key="yaml" value="6" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Image" value="1" />
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="66" />
-          <entry key="YAML" value="6" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="2120" />
-          <entry key="txt" value="36" />
-          <entry key="yaml" value="30" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="PLAIN_TEXT" value="36" />
-          <entry key="Python" value="2120" />
-          <entry key="YAML" value="30" />
-        </counts>
-      </usages-collector>
-    </session>
-    <session id="-393581669">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
           <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="jpg" value="1" />
-          <entry key="json" value="1" />
-          <entry key="py" value="10" />
-          <entry key="txt" value="2" />
+          <entry key="png" value="1" />
+          <entry key="py" value="83" />
+          <entry key="pyi" value="1" />
+          <entry key="txt" value="5" />
+          <entry key="yaml" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Image" value="1" />
-          <entry key="JSON" value="1" />
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="10" />
+          <entry key="Image" value="2" />
+          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="Python" value="83" />
+          <entry key="PythonStub" value="1" />
+          <entry key="YAML" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="262" />
-          <entry key="txt" value="11" />
-          <entry key="yaml" value="21" />
+          <entry key="py" value="3233" />
+          <entry key="txt" value="57" />
+          <entry key="yaml" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="262" />
-          <entry key="YAML" value="21" />
+          <entry key="PLAIN_TEXT" value="57" />
+          <entry key="Python" value="3233" />
+          <entry key="YAML" value="32" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.vcs.git.usages">
+        <counts>
+          <entry key="git.branch.merge" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -106,11 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="169" column="14" lean-forward="true" selection-start-line="169" selection-start-column="14" selection-end-line="169" selection-end-column="14" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="198">
+              <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -118,41 +89,23 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/labelme/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="1253" column="33" lean-forward="true" selection-start-line="1253" selection-start-column="33" selection-end-line="1253" selection-end-column="33" />
+            <state relative-caret-position="175">
+              <caret line="935" selection-start-line="935" selection-end-line="935" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#41511#45138#0" />
+                <element signature="e#64924#65294#0" />
+                <element signature="e#65341#68312#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/labelme/widgets/canvas.py">
+        <entry file="file://$PROJECT_DIR$/labelme/shape.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="689" selection-start-line="689" selection-end-line="689" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/labelme/utils/qt.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="65" column="8" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/labelme/network.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="109">
+              <caret line="97" column="27" lean-forward="true" selection-start-line="97" selection-start-column="27" selection-end-line="97" selection-end-column="27" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -161,21 +114,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/labelme/config/default_config.yaml">
+        <entry file="file://$PROJECT_DIR$/labelme/label_file.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="9" selection-start-line="3" selection-end-line="3" selection-end-column="9" />
+            <state relative-caret-position="372">
+              <caret line="292" column="35" lean-forward="true" selection-start-line="292" selection-start-column="35" selection-end-line="292" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/labelme/label_file.py">
+        <entry file="file://$PROJECT_DIR$/labelme/network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="285" selection-start-line="285" selection-end-line="285" />
+            <state relative-caret-position="264">
+              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
               <folding>
-                <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -192,36 +148,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>imageList</find>
-      <find>QFormLayout</find>
-      <find>polygon</find>
-      <find>fromData</find>
-      <find>move</find>
-      <find>标记</find>
-      <find>x =</find>
-      <find>mouse</find>
-      <find>pixmap</find>
-      <find>QtWidgets.Qt</find>
       <find>Qt</find>
       <find>隐藏</find>
       <find>编辑</find>
       <find>填充颜色</find>
       <find>撤销</find>
       <find>image_list</find>
-      <find>另</find>
+      <find>描边</find>
+      <find>openNextImg</find>
+      <find>open_next</find>
       <find>mouseMoveEvent</find>
-      <find>callback</find>
-      <find>labelFile</find>
-      <find>保存</find>
-      <find>store_data</find>
-      <find>saveFile</find>
-      <find>打开</find>
-      <find>opendir</find>
-      <find>open_</find>
-      <find>保存注释</find>
-      <find>视频</find>
+      <find>打开下一张</find>
+      <find>ctrl</find>
+      <find>self.current.popPoint()</find>
+      <find>历史</find>
+      <find>合适</find>
+      <find>shape_type</find>
+      <find>_highlightSettings</find>
+      <find>self.finalise()</find>
+      <find>visibles</find>
+      <find>auto_save</find>
       <find>keep_prev</find>
-      <find>self._config['keep_prev']</find>
+      <find>loadFile</find>
+      <find>向最</find>
+      <find>kee</find>
+      <find>copy</find>
+      <find>放</find>
+      <find>vis</find>
+      <find>add</find>
+      <find>keep</find>
+      <find>keep-prev</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -232,19 +188,20 @@
       <list>
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
-        <option value="$PROJECT_DIR$/labelme/shape.py" />
         <option value="$PROJECT_DIR$/labelme/widgets/label_dialog.py" />
+        <option value="$PROJECT_DIR$/labelme/network.py" />
         <option value="$PROJECT_DIR$/labelme/widgets/Thumbnail.py" />
-        <option value="$PROJECT_DIR$/labelme/widgets/canvas.py" />
         <option value="$PROJECT_DIR$/test/__init__.py" />
         <option value="$PROJECT_DIR$/test/FloatingWindow.py" />
         <option value="$PROJECT_DIR$/test/PltCanvas.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/labelme/config/labels.txt" />
         <option value="$PROJECT_DIR$/labelme/config/default_config.yaml" />
-        <option value="$PROJECT_DIR$/labelme/network.py" />
+        <option value="$PROJECT_DIR$/labelme/testing.py" />
+        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/labelme/label_file.py" />
+        <option value="$PROJECT_DIR$/labelme/shape.py" />
         <option value="$PROJECT_DIR$/labelme/app.py" />
+        <option value="$PROJECT_DIR$/labelme/widgets/canvas.py" />
       </list>
     </option>
   </component>
@@ -255,9 +212,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="width" value="975" />
-    <option name="height" value="1050" />
+    <option name="x" value="-7" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -265,6 +222,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -274,36 +232,12 @@
             </path>
             <path>
               <item name="LabelMeWeb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LabelMeWeb" type="462c0819:PsiDirectoryNode" />
-              <item name="labelme" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LabelMeWeb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LabelMeWeb" type="462c0819:PsiDirectoryNode" />
-              <item name="labelme" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LabelMeWeb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LabelMeWeb" type="462c0819:PsiDirectoryNode" />
-              <item name="labelme" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LabelMeWeb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LabelMeWeb" type="462c0819:PsiDirectoryNode" />
-              <item name="labelme" type="462c0819:PsiDirectoryNode" />
-              <item name="widgets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LabelMeWeb" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -418,15 +352,39 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="testing" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="LabelMeWeb" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/labelme" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/labelme/testing.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.app" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.FloatingWindow" />
       <item itemvalue="Python.app (1)" />
+      <item itemvalue="Python.testing" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.testing" />
         <item itemvalue="Python.app (1)" />
         <item itemvalue="Python.FloatingWindow" />
         <item itemvalue="Python.app" />
@@ -458,27 +416,34 @@
       <option name="project" value="LOCAL" />
       <updated>1553257122792</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="修改部分翻译">
+      <created>1553258156104</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1553258156104</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25871313" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1684435" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Concurrent Activities Diagram" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32719547" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.32719547" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.398017" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32962137" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32516703" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3975501" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32962137" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067025" side_tool="true" weight="0.32719547" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -524,212 +489,134 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="注释" />
     <MESSAGE value="增加放大镜功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加放大镜功能" />
+    <MESSAGE value="修改部分翻译" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改部分翻译" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1537</line>
+          <line>1544</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1346</line>
+          <line>1353</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1159</line>
-          <option name="timeStamp" value="56" />
+          <line>1573</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1826</line>
-          <option name="timeStamp" value="58" />
+          <url>file://$PROJECT_DIR$/labelme/widgets/canvas.py</url>
+          <line>695</line>
+          <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1353</line>
-          <option name="timeStamp" value="59" />
+          <url>file://$PROJECT_DIR$/labelme/widgets/canvas.py</url>
+          <line>416</line>
+          <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1136</line>
-          <option name="timeStamp" value="84" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>997</line>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>973</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>998</line>
-          <option name="timeStamp" value="89" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>983</line>
-          <option name="timeStamp" value="91" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/label_file.py</url>
-          <line>259</line>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>972</line>
-          <option name="timeStamp" value="93" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/label_file.py</url>
-          <line>285</line>
-          <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1228</line>
+          <url>file://$PROJECT_DIR$/labelme/widgets/canvas.py</url>
+          <line>719</line>
           <option name="timeStamp" value="101" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1405</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1569</line>
+          <url>file://$PROJECT_DIR$/labelme/testing.py</url>
+          <line>28</line>
           <option name="timeStamp" value="104" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1244</line>
-          <option name="timeStamp" value="105" />
+          <url>file://$PROJECT_DIR$/labelme/widgets/canvas.py</url>
+          <line>109</line>
+          <option name="timeStamp" value="195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1541</line>
-          <option name="timeStamp" value="106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1300</line>
-          <option name="timeStamp" value="107" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1276</line>
-          <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1689</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1253</line>
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/labelme/app.py</url>
-          <line>1669</line>
-          <option name="timeStamp" value="122" />
+          <line>1678</line>
+          <option name="timeStamp" value="196" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self.current" language="Python" />
+        <watch expression="self.line" language="Python" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>prevMovePoint.x()</expression-string>
+        <expression-string>item.text()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>prevMovePoint[1].x()</expression-string>
+        <expression-string>a = copy.deepcopy(self.visibles)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>offsets[1].x()</expression-string>
+        <expression-string>a = 0
+if self.current:
+    a = 1
+else:
+    a = 2
+b = a + 0</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>offsets[1].y()</expression-string>
+        <expression-string>if self.current:
+    a = 1
+else:
+    a = 2
+b = a+0</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>offsets[1]</expression-string>
+        <expression-string>if self.current:
+    a = 1
+else:
+    a = 2</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>import numpy
-numpy.array(self.canvas.pixmap.getPixmap())</expression-string>
+        <expression-string>a = self.current and 0</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>import numpy
-numpy.array(self.canvas.pixmap)</expression-string>
+        <expression-string>self.current and 0</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>import numpy</expression-string>
+        <expression-string>self.current</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.canvas.pixmap</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.canvas.</expression-string>
+        <expression-string>shape.addPoint</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
-    <expressions id="evaluateExpression">
+    <expressions id="watch">
       <expression>
-        <expression-string>points = s['points']</expression-string>
+        <expression-string>self.line</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>points = s['label']</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>points</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>s.get('shape_type', 'polygon')</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>s['label']</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.flag_widget.count()</expression-string>
+        <expression-string>self.current</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -737,22 +624,43 @@ numpy.array(self.canvas.pixmap)</expression-string>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/cli/__init__.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/labelme-3.11.0-py3.6.egg/labelme/app.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/labelme-3.11.0-py3.6.egg/labelme/__init__.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/labelme-3.11.0-py3.6.egg/labelme/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="120" column="17" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/labelme-3.11.0-py3.6.egg/labelme/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.py" />
     <entry file="file://$PROJECT_DIR$/__init__.py" />
     <entry file="file://$PROJECT_DIR$/testing.py" />
     <entry file="file://$PROJECT_DIR$/labelme/cli/__init__.py" />
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtWidgets/__init__/QMessageBox.py" />
-    <entry file="file://$PROJECT_DIR$/labelme/cli/draw_json.py" />
-    <entry file="file://$PROJECT_DIR$/labelme/testing.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtWidgets/__init__/QMessageBox.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="213" column="8" selection-start-line="213" selection-start-column="8" selection-end-line="213" selection-end-column="8" />
+        </state>
+      </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/cli/draw_json.py" />
     <entry file="file://$PROJECT_DIR$/labelme/cli/on_docker.py" />
     <entry file="file://$PROJECT_DIR$/labelme/_version.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/dask/dataframe/rolling.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/dask/dataframe/rolling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="251" column="8" selection-start-line="251" selection-start-column="8" selection-end-line="251" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/argparse.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
@@ -777,19 +685,31 @@ numpy.array(self.canvas.pixmap)</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtWidgets/__init__/QComboBox.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qtpy/QtWidgets.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qtpy/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/labelme/config/__init__.py">
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtWidgets/__init__/QComboBox.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1298">
-          <caret line="64" column="23" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+        <state relative-caret-position="324">
+          <caret line="35" column="12" lean-forward="true" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/qtpy/QtGui.py" />
-    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/qtpy/QtWidgets.py" />
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/builtins.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qtpy/QtWidgets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-330" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qtpy/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/qtpy/QtGui.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/qtpy/QtWidgets.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/labelme/widgets/label_dialog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -807,7 +727,13 @@ numpy.array(self.canvas.pixmap)</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtGui/__init__/QBitmap.py" />
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtGui/__init__/QBitmap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/json/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -815,94 +741,161 @@ numpy.array(self.canvas.pixmap)</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qimage2ndarray/__init__.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/qimage2ndarray/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="306" selection-start-line="306" selection-end-line="306" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/labelme/widgets/Thumbnail.py" />
     <entry file="file://$PROJECT_DIR$/test/__init__.py" />
     <entry file="file://$PROJECT_DIR$/test/PltCanvas.py" />
     <entry file="file://$PROJECT_DIR$/test/FloatingWindow.py" />
-    <entry file="file://$PROJECT_DIR$/d552c84de4c433dba010fa43c0ea6718.jpg">
+    <entry file="file://$PROJECT_DIR$/d552c84de4c433dba010fa43c0ea6718.jpg" />
+    <entry file="file://$PROJECT_DIR$/labelme/icons/delete.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/labelme/shape.py">
+    <entry file="file://$PROJECT_DIR$/labelme/config/labels.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
+        <state relative-caret-position="88">
+          <caret line="4" column="4" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/functools.pyi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/utils/qt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtCore/__init__/Qt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="74" column="7" selection-start-line="74" selection-start-column="4" selection-end-line="74" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/utils/shape.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="29" column="49" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="49" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/labelme/config/labels.txt">
+    <entry file="file://$PROJECT_DIR$/labelme/testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        <state relative-caret-position="379">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/d552c84de4c433dba010fa43c0ea6718.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/labelme/utils/qt.py">
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/PyQt5/QtGui/__init__/QPainter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="65" column="8" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
+        <state relative-caret-position="191">
+          <caret line="261" column="8" selection-start-line="261" selection-start-column="8" selection-end-line="261" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/config/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/widgets/label_qlist_widget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/782737105/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="3628" column="8" selection-start-line="3628" selection-start-column="8" selection-end-line="3628" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/labelme/network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="264">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/labelme/config/default_config.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="9" selection-start-line="3" selection-end-line="3" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="169" column="14" lean-forward="true" selection-start-line="169" selection-start-column="14" selection-end-line="169" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/labelme/label_file.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="285" selection-start-line="285" selection-end-line="285" />
+        <state relative-caret-position="372">
+          <caret line="292" column="35" lean-forward="true" selection-start-line="292" selection-start-column="35" selection-end-line="292" selection-end-column="35" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/shape.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="97" column="27" lean-forward="true" selection-start-line="97" selection-start-column="27" selection-end-line="97" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/labelme/widgets/canvas.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="689" selection-start-line="689" selection-end-line="689" />
+        <state relative-caret-position="183">
+          <caret line="590" column="15" selection-start-line="590" selection-start-column="15" selection-end-line="590" selection-end-column="15" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
+            <marker date="1553512996734" expanded="true" signature="4343:4420" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/labelme/config/default_config.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="9" selection-start-line="3" selection-end-line="3" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/labelme/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="1253" column="33" lean-forward="true" selection-start-line="1253" selection-start-column="33" selection-end-line="1253" selection-end-column="33" />
+        <state relative-caret-position="175">
+          <caret line="935" selection-start-line="935" selection-end-line="935" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#41511#45138#0" />
+            <element signature="e#64924#65294#0" />
+            <element signature="e#65341#68312#0" />
           </folding>
         </state>
       </provider>
