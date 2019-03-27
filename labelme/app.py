@@ -3,13 +3,14 @@ import json
 import os
 import os.path as osp
 import re
+import time
 import webbrowser
 
 import cv2
 import numpy as np
 
 from qtpy import QtCore
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QModelIndex
 from qtpy import QtGui
 from qtpy import QtWidgets
 
@@ -125,7 +126,6 @@ class MainWindow(QtWidgets.QMainWindow):
             "Select label to start annotating for it. "
             "Press 'Esc' to deselect.")
         if self._config['labels']:
-            print(self._config['labels'])
             self.uniqLabelList.addItems(self._config['labels'])
             self.uniqLabelList.sortItems()
         self.label_dock = QtWidgets.QDockWidget(u'标签列表', self)
@@ -876,7 +876,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def fileSearchChanged(self):
         self.importDirImages(
-            self.lastOpenDir,
+            self.imageList,
             pattern=self.fileSearch.text(),
             load=False,
         )
@@ -998,7 +998,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 fillColor=self.fillColor.getRgb(),
                 otherData=self.otherData,
                 flags=flags,
-                callback=self.status
+                callback=[self.errorMessage, self.status]
             )
             self.labelFile = lf
             items = self.fileListWidget.findItems(
@@ -1571,43 +1571,45 @@ class MainWindow(QtWidgets.QMainWindow):
             lst.append(item.text())
         return lst
 
-    def importDirImages(self, dirpath, pattern=None, load=True):
+    def importDirImages(self, fileNames, pattern=None, load=True):
         self.actions.openNextImg.setEnabled(True)
         self.actions.openPrevImg.setEnabled(True)
-
-        if not self.mayContinue() or not dirpath:
+        fileNames = [info[1] for info in self.images_data["image_list"]]
+        if not self.mayContinue() or not fileNames:
             return
 
-        self.lastOpenDir = dirpath
+        self.lastOpenDir = fileNames
         self.filename = None
         self.fileListWidget.clear()
-        for filename in self.scanAllImages(dirpath):
+
+        # for filename in self.scanAllImages(fileNames):
+        for filename in fileNames:
             if pattern and pattern not in filename:
                 continue
-            label_file = osp.splitext(filename)[0] + '.json'
-            if self.output_dir:
-                label_file = osp.join(self.output_dir, label_file)
-
             item = QtWidgets.QListWidgetItem(filename)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
-            if QtCore.QFile.exists(label_file) and \
-                    LabelFile.is_label_file(label_file):
-                item.setCheckState(Qt.Checked)  # 如果有标签文件，则勾选
+            label = self.dict_filename_label_web[filename]
+            if label:
+                label = json.loads(label)
+                if len(label["shapes"]) != 0:
+                    item.setCheckState(Qt.Checked)  # 如果有标签文件，则勾选
+                else:
+                    item.setCheckState(Qt.Unchecked)
             else:
                 item.setCheckState(Qt.Unchecked)
             self.fileListWidget.addItem(item)
-        self.openNextImg(load=load)
+        self.openNextImgByWeb(load=load)
 
-    def scanAllImages(self, folderPath):
+    def scanAllImages(self, fileNames):
+        s = time.time()
         extensions = ['.%s' % fmt.data().decode("ascii").lower()
                       for fmt in QtGui.QImageReader.supportedImageFormats()]
         images = []
 
-        for root, dirs, files in os.walk(folderPath):
-            for file in files:
-                if file.lower().endswith(tuple(extensions)):
-                    relativePath = osp.join(root, file)
-                    images.append(relativePath)
+        for fileName in fileNames:
+            if fileName.lower().endswith(tuple(extensions)):
+                images.append(fileName)
+
         images.sort(key=lambda x: x.lower())
         return images
 
@@ -1721,7 +1723,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._config['keep_prev'] = keep_prev
 
     def importWebImages(self, pattern=None, load=True):
-        images_data = post("get_file_list")
+        self.images_data = post("get_file_list")
         self.actions.openNextImg.setEnabled(True)
         self.actions.openPrevImg.setEnabled(True)
 
@@ -1731,7 +1733,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.filename = None
         self.fileListWidget.clear()
         self.dict_filename_label_web = dict()
-        for id, filename, label in images_data["image_list"]:
+        for id, filename, label in self.images_data["image_list"]:
             self.dict_filename_label_web[filename] = label
             if pattern and pattern not in filename:
                 continue
@@ -1748,7 +1750,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 item.setCheckState(Qt.Unchecked)
             self.fileListWidget.addItem(item)
         self.openNextImgByWeb(load=load)
-        print()
 
     def img2pixmap(self, image):
         Y, X = image.shape[:2]
@@ -1760,22 +1761,29 @@ class MainWindow(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap.fromImage(qimage)
         return pixmap
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event, adsorb, press, focus_x, focus_y):
         """
         Canvas 类的鼠标移动事件回调
         :param event:
         :return:
         """
         image = self.labelFile.image_numpy
+        if image is not None:
+            self.image_bak = image
+        elif self.image_bak is not None:
+            image = self.image_bak
         if not image is None:
             # image = image[:, :, ::-1]
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             h, w = image.shape[:2]
             offsetsX = self.canvas.offsets[0].x()
             offsetsY = self.canvas.offsets[1].y()
-
-            x = min(max(self.canvas.prevMovePoint.x(), 0), w)
-            y = min(max(self.canvas.prevMovePoint.y(), 0), h)
+            if adsorb or press:
+                x = min(max(self.canvas.prevMovePoint.x(), 0), w)
+                y = min(max(self.canvas.prevMovePoint.y(), 0), h)
+            else:
+                x = focus_x
+                y = focus_y
 
             color = (255, 255, 0)
             r, g, b = image[max(min(y, h - 1), 1), max(min(x, w - 1), 1), :]

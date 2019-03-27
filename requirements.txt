@@ -1,0 +1,10 @@
+PyQt5==5.11.3
+Pillow==5.2.0
+numpy==1.14.6
+opencv-python==3.4.0.12
+yarg==0.1.9
+QtPy==1.7.0
+termcolor==1.1.0
+PyYAML==5.1
+PyGetWindow==0.0.1
+pyautogui==0.9.42

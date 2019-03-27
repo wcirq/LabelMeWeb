@@ -110,7 +110,10 @@ class LabelFile(object):
             elif isinstance(filename, list):
                 # data = filename[1]
                 data = post("get_lable_by_path", data={"image_path": filename[0]})
-                data = json.loads(data["label"])
+                try:
+                    data = json.loads(data["label"])
+                except Exception as e:
+                    print(e)
                 if data['imageData'] is not None:
                     imageData = base64.b64decode(data['imageData'])
                     if PY2 and QT4:
@@ -290,12 +293,13 @@ class LabelFile(object):
             data = {"image_path": image_path, "image_label": image_label}
             res = post("save_lable_by_path", data)
             if res["state"] == 1:
-                callback("标签保存成功！")
+                callback[1]("标签保存成功！")
             else:
-                callback("标签保存失败！")
+                callback[0]("保存提示!", "标签保存失败！")
             self.filename = filename
         except Exception as e:
             print(e)
+            print(data, type(data))
             raise LabelFileError(e)
 
     @staticmethod

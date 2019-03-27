@@ -1,10 +1,11 @@
+# import pyautogui
 from qtpy import QtCore
 from qtpy import QtGui
 from qtpy import QtWidgets
 
+import labelme.utils
 from labelme import QT5
 from labelme.shape import Shape
-import labelme.utils
 
 # TODO(unknown):
 # - [maybe] Find optimal epsilon value.
@@ -37,6 +38,10 @@ class Canvas(QtWidgets.QWidget):
         self.callback = callback
         self.epsilon = kwargs.pop('epsilon', 11.0)
         super(Canvas, self).__init__(*args, **kwargs)
+        self.adsorb = True  # 用于判断是否第一次进入某点附近
+        self.press = False  # 用于判断是否在某点附近按下
+        self.focus_x = -1  # 进入某控件的中心坐标x
+        self.focus_y = -1  # 进入某控件的中心坐标y
         # Initialise local state.
         self.mode = self.EDIT
         self.shapes = []
@@ -145,10 +150,11 @@ class Canvas(QtWidgets.QWidget):
 
     def set_expand(self, event):
         if not self.callback is None:
-            self.callback(event)
+            self.callback(event, self.adsorb, self.press, self.focus_x, self.focus_y)
 
     def mouseMoveEvent(self, ev):
         """Update line with last point and current coordinates."""
+        # 绘制辅助线
         self.set_expand(ev)
         try:
             if QT5:
@@ -232,12 +238,14 @@ class Canvas(QtWidgets.QWidget):
         # - Highlight vertex
         # Update shape/vertex fill and tooltip value accordingly.
         self.setToolTip("Image")
+        flag = True
         for shape in reversed([s for s in self.shapes if self.isVisible(s)]):
             # Look for a nearby vertex to highlight. If that fails,
             # check if we happen to be inside a shape.
             index = shape.nearestVertex(pos, self.epsilon)
             index_edge = shape.nearestEdge(pos, self.epsilon)
             if index is not None:
+                flag = False
                 if self.selectedVertex():
                     self.hShape.highlightClear()
                 self.hVertex = index
@@ -245,6 +253,14 @@ class Canvas(QtWidgets.QWidget):
                 self.hEdge = index_edge
                 shape.highlightVertex(index, shape.MOVE_VERTEX)
                 self.overrideCursor(CURSOR_POINT)
+
+                self.focus_x, self.focus_y = shape.points[index].x(), shape.points[index].y()
+                x, y = self.focus_x - pos.x(), self.focus_y - pos.y()
+                x, y = int(x * self.scale + 0.5), int(y * self.scale + 0.5)
+                # if self.adsorb: pyautogui.moveRel(x, y, duration=0.1)
+                # pyautogui.moveRel(x, y, duration=0.1)
+                self.adsorb = False
+
                 self.setToolTip("单击并拖动可移动点")
                 self.setStatusTip(self.toolTip())
                 self.update()
@@ -266,6 +282,9 @@ class Canvas(QtWidgets.QWidget):
                 self.hShape.highlightClear()
                 self.update()
             self.hVertex, self.hShape, self.hEdge = None, None, None
+
+        if flag:
+            self.adsorb = True
         self.edgeSelected.emit(self.hEdge is not None)
 
     def addPointToEdge(self):
@@ -294,6 +313,7 @@ class Canvas(QtWidgets.QWidget):
         :param ev:
         :return:
         """
+        self.press = True
         if QT5:
             pos = self.transformPos(ev.pos())
         else:
@@ -365,6 +385,7 @@ class Canvas(QtWidgets.QWidget):
         :param ev:
         :return:
         """
+        self.press = False
         if ev.button() == QtCore.Qt.RightButton:
             menu = self.menus[bool(self.selectedShapeCopy)]
             self.restoreCursor()

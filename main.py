@@ -128,7 +128,7 @@ def _main():
     if os.path.isfile('labelme/config/labels.txt'):
         with codecs.open('labelme/config/labels.txt', 'r', encoding='utf-8') as f:
             config["labels"] = [l.strip() for l in f if l.strip()]
-            print(config["labels"])
+            # print(config["labels"])
     # if not config["labels"] is None:
     #     if os.path.isfile(config["labels"]):
     #         with codecs.open(config["labels"], 'r', encoding='utf-8') as f:
