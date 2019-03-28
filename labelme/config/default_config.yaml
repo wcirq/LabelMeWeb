@@ -51,6 +51,7 @@ shortcuts:
   save_as: Ctrl+Shift+S
   save_to: null
   delete_file: Ctrl+Delete
+  ignoreImage: null
 
   open_next: [D, Ctrl+Shift+D]
   open_prev: [A, Ctrl+Shift+A]
@@ -64,7 +65,7 @@ shortcuts:
   add_point: Ctrl+Shift+P
   create_polygon: Ctrl+N
   create_rectangle: Ctrl+R
-  create_circle: null
+  create_circle: Ctrl+Q
   create_line: null
   create_point: null
   create_linestrip: null

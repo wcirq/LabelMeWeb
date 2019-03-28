@@ -228,6 +228,15 @@ class MainWindow(QtWidgets.QMainWindow):
             '删除当前标签文件',
             enabled=False)
 
+        ignoreImage = action(
+            '&忽略图片',
+            self.ignoreImage,
+            shortcuts['ignoreImage'],
+            'ignore',
+            '忽略笔尖模糊的图片',
+            checkable=True,
+            enabled=True)
+
         changeOutputDir = action(
             '&输出目录',
             slot=self.changeOutputDirDialog,
@@ -541,6 +550,7 @@ class MainWindow(QtWidgets.QMainWindow):
             openPrevImg,
             save,
             deleteFile,
+            ignoreImage,
             None,
             createMode,
             editMode,
@@ -1852,3 +1862,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.close()
             else:
                 self._saveFile(self.saveFileDialog())
+
+    def ignoreImage(self):
+        print("忽略图片")
