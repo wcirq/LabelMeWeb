@@ -62,6 +62,7 @@ class Canvas(QtWidgets.QWidget):
         self.scale = 1.0
         self.pixmap = QtGui.QPixmap()
         self.visible = {}
+        self.PRESS_KEY_ALT = True # 是否按下alt
         self._hideBackround = False
         self.hideBackround = False
         self.hShape = None
@@ -300,7 +301,10 @@ class Canvas(QtWidgets.QWidget):
         index = self.hEdge
         point = self.prevMovePoint
         shape.insertPoint(index, point)
-        visible = 1  # 默认可见
+        if self.PRESS_KEY_ALT:
+            visible = 0
+        else:
+            visible = 1
         shape.visibles.insert(index, visible)
         shape.highlightVertex(index, shape.MOVE_VERTEX)
         self.hShape = shape
@@ -715,6 +719,16 @@ class Canvas(QtWidgets.QWidget):
             self.update()
         elif key == QtCore.Qt.Key_Return and self.canCloseShape():
             self.finalise()
+        if int(ev.modifiers()) == QtCore.Qt.ALT:
+            self.PRESS_KEY_ALT = True
+            print(self.PRESS_KEY_ALT)
+
+    def keyReleaseEvent(self, event):
+        print(event.key())
+        if event.type() == QtCore.QEvent.KeyRelease:
+            if event.key() == QtCore.Qt.ALT:
+                self.PRESS_KEY_ALT = False
+                print(self.PRESS_KEY_ALT)
 
     def setLastLabel(self, text):
         assert text
