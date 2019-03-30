@@ -288,7 +288,31 @@ class Canvas(QtWidgets.QWidget):
             self.adsorb = True
         self.edgeSelected.emit(self.hEdge is not None)
 
-    def addPointToEdge(self):
+    def deletePoint(self):
+        """
+        删除点
+        :return:
+        """
+        if (self.hShape is None and
+                self.hEdge is None and
+                self.prevMovePoint is None):
+            return
+        shape = self.hShape
+        index = self.hVertex
+        # print("index={}, points={}, visibles={}".format(index, len(shape.points), len(shape.visibles)))
+        shape.popPointByIndex(index)
+        shape.highlightVertex(index, shape.MOVE_VERTEX)
+        self.hShape = shape
+        self.hVertex = index
+        self.hEdge = None
+
+    def addVisiblePoint(self):
+        self.addPointToEdge(1)
+
+    def addDisVisiblePoint(self):
+        self.addPointToEdge(0)
+
+    def addPointToEdge(self, visible=1):
         """
         在边缘增加一个点
         :return:
@@ -301,10 +325,6 @@ class Canvas(QtWidgets.QWidget):
         index = self.hEdge
         point = self.prevMovePoint
         shape.insertPoint(index, point)
-        if self.PRESS_KEY_ALT:
-            visible = 0
-        else:
-            visible = 1
         shape.visibles.insert(index, visible)
         shape.highlightVertex(index, shape.MOVE_VERTEX)
         self.hShape = shape
@@ -721,14 +741,14 @@ class Canvas(QtWidgets.QWidget):
             self.finalise()
         if int(ev.modifiers()) == QtCore.Qt.ALT:
             self.PRESS_KEY_ALT = True
-            print(self.PRESS_KEY_ALT)
+            # print(self.PRESS_KEY_ALT)
 
     def keyReleaseEvent(self, event):
-        print(event.key())
+        # print(event.key())
         if event.type() == QtCore.QEvent.KeyRelease:
             if event.key() == QtCore.Qt.ALT:
                 self.PRESS_KEY_ALT = False
-                print(self.PRESS_KEY_ALT)
+                # print(self.PRESS_KEY_ALT)
 
     def setLastLabel(self, text):
         assert text

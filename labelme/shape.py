@@ -91,6 +91,12 @@ class Shape(object):
             return self.points.pop()
         return None
 
+    def popPointByIndex(self, index):
+        if self.points:
+            self.visibles.pop(index)
+            return self.points.pop(index)
+        return None
+
     def insertPoint(self, i, point):
         self.points.insert(i, point)
 

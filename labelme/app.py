@@ -2,6 +2,7 @@ import functools
 import json
 import os
 import os.path as osp
+import pickle
 import re
 import time
 import webbrowser
@@ -228,11 +229,11 @@ class MainWindow(QtWidgets.QMainWindow):
             '删除当前标签文件',
             enabled=False)
 
-        ignoreImage = action(
+        ignoreImageButton = action(
             '&忽略图片',
             self.ignoreImage,
             shortcuts['ignoreImage'],
-            'ignore',
+            'open',
             '忽略笔尖模糊的图片',
             checkable=True,
             enabled=True)
@@ -334,9 +335,18 @@ class MainWindow(QtWidgets.QMainWindow):
         undoLastPoint = action('撤消最后一步', self.canvas.undoLastPoint,
                                shortcuts['undo_last_point'], 'undo',
                                '撤消上次绘制的点', enabled=False)
-        addPoint = action('增加一个点', self.canvas.addPointToEdge,
-                          None, 'edit', '向最近的边添加点',
-                          enabled=False)
+
+        deletePoint = action('删除点', self.canvas.deletePoint,
+                             None, 'edit', '删除该点',
+                             enabled=False)
+
+        addDisVisiblePoint = action('增加不可见点', self.canvas.addDisVisiblePoint,
+                                    None, 'edit', '向最近的边添加可见点',
+                                    enabled=False)
+
+        addVisiblePoint = action('增加可见点', self.canvas.addVisiblePoint,
+                                 None, 'edit', '向最近的边添加可见点',
+                                 enabled=False)
 
         undo = action('撤销', self.undoShapeEdit, shortcuts['undo'], 'undo',
                       '撤消上次添加和编辑形状', enabled=False)
@@ -427,6 +437,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Store actions for further handling.
         self.actions = utils.struct(
+            ignoreImageButton=ignoreImageButton,
             saveAuto=saveAuto,
             save=save, close=close,
             deleteFile=deleteFile,
@@ -434,7 +445,9 @@ class MainWindow(QtWidgets.QMainWindow):
             toggleKeepPrevMode=toggle_keep_prev_mode,
             delete=delete, edit=edit, copy=copy,
             undoLastPoint=undoLastPoint, undo=undo,
-            addPoint=addPoint,
+            deletePoint=deletePoint,
+            addDisVisiblePoint=addDisVisiblePoint,
+            addVisiblePoint=addVisiblePoint,
             createMode=createMode, editMode=editMode,
             createRectangleMode=createRectangleMode,
             createCircleMode=createCircleMode,
@@ -466,7 +479,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 shapeFillColor,
                 undo,
                 undoLastPoint,
-                addPoint,
+                deletePoint,
+                addDisVisiblePoint,
+                addVisiblePoint,
             ),
             onLoadActive=(
                 close,
@@ -481,7 +496,9 @@ class MainWindow(QtWidgets.QMainWindow):
             onShapesPresent=(hideAll, showAll),
         )
 
-        self.canvas.edgeSelected.connect(self.actions.addPoint.setEnabled)
+        self.canvas.edgeSelected.connect(self.actions.addDisVisiblePoint.setEnabled)
+        self.canvas.edgeSelected.connect(self.actions.addVisiblePoint.setEnabled)
+        self.canvas.edgeSelected.connect(self.actions.deletePoint.setEnabled)
 
         self.menus = utils.struct(
             file=self.menu('&文件'),
@@ -550,7 +567,7 @@ class MainWindow(QtWidgets.QMainWindow):
             openPrevImg,
             save,
             deleteFile,
-            ignoreImage,
+            ignoreImageButton,
             None,
             createMode,
             editMode,
@@ -1667,7 +1684,17 @@ class MainWindow(QtWidgets.QMainWindow):
             self.fillColor = QtGui.QColor(*self.labelFile.fillColor)
         self.otherData = self.labelFile.otherData
 
-        image = QtGui.QImage.fromData(self.imageData)
+        if self.labelFile.fuzzy:
+            self.actions.ignoreImageButton.setIconText("恢复")
+            image = self.labelFile.image_numpy
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+            image = cv2.imencode('.jpg', image)
+            image = image[1].tobytes()
+        else:
+            self.actions.ignoreImageButton.setIconText("忽略")
+            image = self.imageData
+
+        image = QtGui.QImage.fromData(image)
 
         if image.isNull():
             formats = ['*.{}'.format(fmt.data().decode())
@@ -1734,6 +1761,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def importWebImages(self, pattern=None, load=True):
         self.images_data = post("get_file_list")
+
+        # with open('images_data.pkl', 'wb') as f:
+        #     pickle.dump(self.images_data, f)
+        #
+        # with open('images_data.pkl', 'rb') as f:
+        #     self.images_data = pickle.load(f)
+
         self.actions.openNextImg.setEnabled(True)
         self.actions.openPrevImg.setEnabled(True)
 
@@ -1864,4 +1898,32 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._saveFile(self.saveFileDialog())
 
     def ignoreImage(self):
-        print("忽略图片")
+        ignoreImageButton = self.actions.ignoreImageButton
+        # ignoreImageButton.setEnabled(True)
+
+        if not self.labelFile.fuzzy:
+            res = post("set_fuzzy_by_path", data={"image_path": self.labelFile.filename, "fuzzy": 1})
+            if res["state"] == 1:
+                image = self.labelFile.image_numpy
+                image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+                image = cv2.imencode('.jpg', image)
+                image = image[1].tobytes()
+                image = QtGui.QImage.fromData(image)
+                self.canvas.loadPixmap(QtGui.QPixmap.fromImage(image))
+                self.loadLabels(self.labelFile.shapes)
+                ignoreImageButton.setIconText("恢复")
+                self.labelFile.fuzzy = 1
+            else:
+                self.errorMessage("修改提示", "修改失败")
+
+        else:
+            res = post("set_fuzzy_by_path", data={"image_path": self.labelFile.filename, "fuzzy": 0})
+            if res["state"] == 1:
+                image = self.labelFile.imageData
+                image = QtGui.QImage.fromData(image)
+                self.canvas.loadPixmap(QtGui.QPixmap.fromImage(image))
+                self.loadLabels(self.labelFile.shapes)
+                ignoreImageButton.setIconText("忽略")
+                self.labelFile.fuzzy = 0
+            else:
+                self.errorMessage("修改提示", "修改失败")

@@ -26,6 +26,7 @@ class LabelFile(object):
         self.imagePath = None
         self.imageData = None
         self.image_numpy = None
+        self.fuzzy = False
 
         if isinstance(filename, list):
             if filename is not None:
@@ -109,9 +110,10 @@ class LabelFile(object):
                         otherData[key] = value
             elif isinstance(filename, list):
                 # data = filename[1]
-                data = post("get_lable_by_path", data={"image_path": filename[0]})
+                datas = post("get_lable_by_path", data={"image_path": filename[0]})
                 try:
-                    data = json.loads(data["label"])
+                    data = json.loads(datas["label"])
+                    fuzzy = datas["fuzzy"]
                 except Exception as e:
                     print(e)
                 if data['imageData'] is not None:
@@ -150,36 +152,7 @@ class LabelFile(object):
                 for key, value in data.items():
                     if key not in keys:
                         otherData[key] = value
-                # imageData = PIL.Image.fromarray(image)
-                # for s in data:
-                #     type = s["type"]
-                #     tag = s["tag"]
-                #     label = ""
-                #     if type == 0:
-                #         label = "笔杆"
-                #     elif type == 1:
-                #         label = "手掌"
-                #     elif type == 2:
-                #         label = "表格"
-                #     points = []
-                #     if type < 2:
-                #         points.append([int(tag[0]*width+0.5), int(tag[1]*height+0.5)])
-                #         points.append([int(tag[2]*width+0.5), int(tag[3]*height+0.5)])
-                #     line_color = None
-                #     fill_color = None
-                #     shape_type = ""
-                #     if type == 0:
-                #         shape_type = "line"
-                #     elif type == 1:
-                #         shape_type = "rectangle"
-                #     elif type == 2:
-                #         shape_type = "polygon"
-                #     shapes.append([label, points, line_color, fill_color, shape_type])
-                # flags = {}
-                # imagePath = None
-                # lineColor = None
-                # fillColor = None
-                # filename = None
+
         except Exception as e:
             raise LabelFileError(e)
 
@@ -192,6 +165,7 @@ class LabelFile(object):
         self.fillColor = fillColor
         self.filename = filename
         self.otherData = otherData
+        self.fuzzy = fuzzy
 
     @staticmethod
     def _check_image_height_and_width(imageData, imageHeight, imageWidth):
