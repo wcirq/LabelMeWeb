@@ -1027,7 +1027,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 flags=flags,
                 callback=[self.errorMessage, self.status]
             )
-            self.labelFile = lf
+            # self.labelFile = lf
             items = self.fileListWidget.findItems(
                 self.imagePath, Qt.MatchExactly
             )
@@ -1729,6 +1729,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.toggleActions(True)
         self.status("Loaded %s" % osp.basename(str(filename)))
         return True
+# https://kyfw.12306.cn/passport/captcha/captcha-check?answer=245%2C105&rand=sjrand&login_site=E
+
+# https://kyfw.12306.cn/passport/captcha/captcha-check?callback=jQuery19106513270212890739_1554170758410&answer=258,37,108,105&rand=sjrand&login_site=E&_=1554170758412
+# https://kyfw.12306.cn/passport/captcha/captcha-check?callback=jQuery1910090132012414056_1554171347314&answer=44,33,107,39,265,42&rand=sjrand&login_site=E&_=1554171347316
 
     def openNextImgByWeb(self, _value=False, load=True):
         keep_prev = self._config['keep_prev']
@@ -1760,7 +1764,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self._config['keep_prev'] = keep_prev
 
     def importWebImages(self, pattern=None, load=True):
-        self.images_data = post("get_file_list")
+        while 1:
+            self.images_data = post("get_file_list")
+            if "state" in self.images_data:
+                print("服务器报错！正在在重试！")
+                continue
+            elif "image_list" in self.images_data:
+                print("获取图片列表成功 正在加载！")
+                break
+            else:
+                print("未知错误！正在在重试！")
+                continue
 
         # with open('images_data.pkl', 'wb') as f:
         #     pickle.dump(self.images_data, f)
@@ -1898,19 +1912,30 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._saveFile(self.saveFileDialog())
 
     def ignoreImage(self):
+        def format_shape(s):
+            return [s.label.encode('utf-8') if PY2 else s.label,
+                    [(p.x(), p.y()) for p in s.points],
+                    s.visibles,
+                    s.line_color.getRgb(),
+                    s.fill_color.getRgb(),
+                    s.shape_type]
+
         ignoreImageButton = self.actions.ignoreImageButton
         # ignoreImageButton.setEnabled(True)
-
+        shapes = [format_shape(shape) for shape in self.labelList.shapes]
         if not self.labelFile.fuzzy:
             res = post("set_fuzzy_by_path", data={"image_path": self.labelFile.filename, "fuzzy": 1})
             if res["state"] == 1:
                 image = self.labelFile.image_numpy
+                if image is None:
+                    image =self.image_bak
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
                 image = cv2.imencode('.jpg', image)
                 image = image[1].tobytes()
                 image = QtGui.QImage.fromData(image)
                 self.canvas.loadPixmap(QtGui.QPixmap.fromImage(image))
-                self.loadLabels(self.labelFile.shapes)
+                self.labelList.clear()
+                self.loadLabels(shapes)
                 ignoreImageButton.setIconText("恢复")
                 self.labelFile.fuzzy = 1
             else:
@@ -1922,7 +1947,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 image = self.labelFile.imageData
                 image = QtGui.QImage.fromData(image)
                 self.canvas.loadPixmap(QtGui.QPixmap.fromImage(image))
-                self.loadLabels(self.labelFile.shapes)
+                self.labelList.clear()
+                self.loadLabels(shapes)
                 ignoreImageButton.setIconText("忽略")
                 self.labelFile.fuzzy = 0
             else:

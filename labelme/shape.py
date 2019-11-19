@@ -186,7 +186,10 @@ class Shape(object):
         if shape == self.P_SQUARE:
             path.addRect(point.x() - d / 2, point.y() - d / 2, d, d)
         elif shape == self.P_ROUND:
-            path.addEllipse(point, d / 2.0, d / 2.0)
+            if i == 1:
+                path.addEllipse(point, d / 1.0, d / 1.0)
+            else:
+                path.addEllipse(point, d / 2.0, d / 2.0)
         else:
             assert False, "unsupported vertex shape"
         root.drawPath(path)
