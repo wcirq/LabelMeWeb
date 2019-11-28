@@ -29,8 +29,32 @@ def update_dict(target_dict, new_dict, validate_item=None):
 
 def get_default_config():
     config_file = osp.join(here, 'default_config.yaml')
-    with open(config_file) as f:
-        config = yaml.load(f)
+    try:
+        with open(config_file) as f:
+            config = yaml.load(f)
+    except:
+        config = {'auto_save': False, 'display_label_popup': True, 'store_data': False, 'keep_prev': False,
+                        'logger_level': 'info', 'flags': None, 'labels': 'labelme/config/labels.txt', 'aa': None,
+                        'file_search': None, 'sort_labels': True, 'validate_label': None,
+                        'flag_dock': {'show': True, 'closable': True, 'movable': True, 'floatable': True},
+                        'label_dock': {'show': True, 'closable': True, 'movable': True, 'floatable': True},
+                        'shape_dock': {'show': True, 'closable': True, 'movable': True, 'floatable': True},
+                        'file_dock': {'show': True, 'closable': True, 'movable': True, 'floatable': True},
+                        'show_label_text_field': True, 'label_completion': 'startswith',
+                        'fit_to_content': {'column': True, 'row': False}, 'epsilon': 20.0,
+                        'shortcuts': {'close': 'Ctrl+W', 'open': 'Ctrl+O', 'open_dir': 'Ctrl+U', 'quit': 'Ctrl+Q',
+                                      'save': 'Ctrl+S', 'save_as': 'Ctrl+Shift+S', 'save_to': None,
+                                      'delete_file': 'Ctrl+Delete', 'ignoreImage': None,
+                                      'open_next': ['D', 'Ctrl+Shift+D'], 'open_prev': ['A', 'Ctrl+Shift+A'],
+                                      'zoom_in': ['Ctrl++', 'Ctrl+='], 'zoom_out': 'Ctrl+-',
+                                      'zoom_to_original': 'Ctrl+0', 'fit_window': 'Ctrl+F', 'fit_width': 'Ctrl+Shift+F',
+                                      'add_point': 'Ctrl+Shift+P', 'create_polygon': 'Ctrl+N',
+                                      'create_rectangle': 'Ctrl+R', 'create_circle': 'Ctrl+Q', 'create_line': None,
+                                      'create_point': None, 'create_linestrip': None, 'edit_polygon': 'Ctrl+J',
+                                      'delete_polygon': 'Delete', 'duplicate_polygon': 'Ctrl+D', 'undo': 'Ctrl+Z',
+                                      'undo_last_point': ['Ctrl+Z', 'Backspace'], 'edit_label': 'Ctrl+E',
+                                      'edit_line_color': 'Ctrl+L', 'edit_fill_color': 'Ctrl+Shift+L',
+                                      'toggle_keep_prev_mode': 'Ctrl+P'}}
 
     # save default config to ~/.labelmerc
     user_config_file = osp.join(osp.expanduser('~'), '.labelmerc')

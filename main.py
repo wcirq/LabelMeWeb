@@ -1,3 +1,4 @@
+# -*- coding=utf-8 -*-
 import argparse
 import codecs
 import logging
@@ -123,7 +124,8 @@ def _main():
     filename = config_from_args.pop('filename')
     output = config_from_args.pop('output')
     config_file = config_from_args.pop('config_file')
-    config = get_config(config_from_args, config_file)
+    # config = get_config(config_from_args, config_file)
+    config = get_config(config_from_args, None)
 
     if os.path.isfile('labelme/config/labels.txt'):
         with codecs.open('labelme/config/labels.txt', 'r', encoding='utf-8') as f:
@@ -145,6 +147,7 @@ def _main():
     output_file = None
     output_dir = None
     if output is not None:
+
         if output.endswith('.json'):
             output_file = output
         else:

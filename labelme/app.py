@@ -18,7 +18,7 @@ from qtpy import QtWidgets
 from labelme import __appname__
 from labelme import PY2
 from labelme import QT5
-from labelme.network import post
+from labelme.network import post, URL
 
 from . import utils
 from labelme.config import get_config
@@ -127,7 +127,8 @@ class MainWindow(QtWidgets.QMainWindow):
             "Select label to start annotating for it. "
             "Press 'Esc' to deselect.")
         if self._config['labels']:
-            self.uniqLabelList.addItems(self._config['labels'])
+            # self.uniqLabelList.addItems(self._config['labels'])
+            # self.uniqLabelList.addItems(['pen', 'hand', 'form'])
             self.uniqLabelList.sortItems()
         self.label_dock = QtWidgets.QDockWidget(u'标签列表', self)
         self.label_dock.setObjectName(u'Label List')
@@ -772,8 +773,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actions.undo.setEnabled(self.canvas.isShapeRestorable)
 
     def tutorial(self):
-        url = 'https://github.com/wkentaro/labelme/tree/master/examples/tutorial'  # NOQA
-        # webbrowser.open(url)
+        # url = 'https://github.com/wkentaro/labelme/tree/master/examples/tutorial'  # NOQA
+        # url = 'http://222.85.230.14:12345/xiaoi/doc'  # NOQA
+        url = URL.format("doc")
+        webbrowser.open(url)
 
     def toggleAddPointEnabled(self, enabled):
         self.actions.addPoint.setEnabled(enabled)
@@ -1670,10 +1673,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.labelFile = LabelFile([filename, label_tag])
         except LabelFileError as e:
             self.errorMessage(
-                'Error opening file',
-                "<p><b>%s</b></p>"
-                "<p>Make sure <i>%s</i> is a valid label file."
-                % (e, label_tag))
+                '网络繁忙',
+                "<p><i>%s</i> "
+                % ("服务器忙！请重试！"))
+            # self.errorMessage(
+            #     'Error opening file',
+            #     "<p><b>%s</b></p>"
+            #     "<p>Make sure <i>%s</i> is a valid label file."
+            #     % (e, label_tag))
             self.status("Error reading %s" % label_tag)
             return False
         self.imageData = self.labelFile.imageData
@@ -1766,6 +1773,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def importWebImages(self, pattern=None, load=True):
         while 1:
             self.images_data = post("get_file_list")
+            if self.images_data is None:
+                print("服务器报错！正在在重试！")
+                continue
             if "state" in self.images_data:
                 print("服务器报错！正在在重试！")
                 continue

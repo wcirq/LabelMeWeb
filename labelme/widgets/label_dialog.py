@@ -65,7 +65,9 @@ class LabelDialog(QtWidgets.QDialog):
             )
         self._sort_labels = sort_labels
         if labels:
-            self.labelList.addItems(labels)
+            pass
+            # self.labelList.addItems(labels)
+            # self.labelList.addItems(['pen', 'hand', 'form'])
         if self._sort_labels:
             self.labelList.sortItems()
         else:

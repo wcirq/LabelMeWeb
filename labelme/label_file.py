@@ -6,6 +6,8 @@ import os.path as osp
 import PIL.Image
 import cv2
 import numpy as np
+from qtpy import QtWidgets
+
 from labelme._version import __version__
 from labelme.logger import logger
 from labelme import PY2
@@ -114,58 +116,62 @@ class LabelFile(object):
                 try:
                     data = json.loads(datas["label"])
                     fuzzy = datas["fuzzy"]
+
+                    if data['imageData'] is not None:
+                        imageData = base64.b64decode(data['imageData'])
+                        if PY2 and QT4:
+                            imageData = utils.img_data_to_png_data(imageData)
+                    else:
+                        result = post("get_image_by_path", data={"image_path": filename[0]})
+                        image = result["image"]
+                        imageData = base64.b64decode(image)
+                    image_numpy = np.asarray(bytearray(imageData), dtype="uint8")
+                    self.image_numpy = cv2.imdecode(image_numpy, cv2.IMREAD_COLOR)
+                    height, width = self.image_numpy.shape[:2]
+
+                    flags = data.get('flags')
+                    imagePath = data['imagePath']
+                    self._check_image_height_and_width(
+                        base64.b64encode(imageData).decode('utf-8'),
+                        data.get('imageHeight'),
+                        data.get('imageWidth'),
+                    )
+                    lineColor = data['lineColor']
+                    fillColor = data['fillColor']
+                    for s in data['shapes']:
+                        label = s['label']
+                        points = s['points']
+                        if "visible" in s.keys():
+                            visibles = s['visible']
+                        else:
+                            visibles = [1] * len(points)
+                        line_color = s['line_color']
+                        fill_color = s['fill_color']
+                        shape_type = s.get('shape_type', 'polygon')
+                        shapes.append([label, points, visibles, line_color, fill_color, shape_type])
+
+                    for key, value in data.items():
+                        if key not in keys:
+                            otherData[key] = value
+                    # Only replace data after everything is loaded.
+                    self.flags = flags
+                    self.shapes = shapes
+                    self.imagePath = imagePath
+                    self.imageData = imageData
+                    self.lineColor = lineColor
+                    self.fillColor = fillColor
+                    self.filename = filename
+                    self.otherData = otherData
+                    self.fuzzy = fuzzy
                 except Exception as e:
                     print(e)
-                if data['imageData'] is not None:
-                    imageData = base64.b64decode(data['imageData'])
-                    if PY2 and QT4:
-                        imageData = utils.img_data_to_png_data(imageData)
-                else:
-                    result = post("get_image_by_path", data={"image_path": filename[0]})
-                    image = result["image"]
-                    imageData = base64.b64decode(image)
-                image_numpy = np.asarray(bytearray(imageData), dtype="uint8")
-                self.image_numpy = cv2.imdecode(image_numpy, cv2.IMREAD_COLOR)
-                height, width = self.image_numpy.shape[:2]
+                    raise LabelFileError(e)
 
-                flags = data.get('flags')
-                imagePath = data['imagePath']
-                self._check_image_height_and_width(
-                    base64.b64encode(imageData).decode('utf-8'),
-                    data.get('imageHeight'),
-                    data.get('imageWidth'),
-                )
-                lineColor = data['lineColor']
-                fillColor = data['fillColor']
-                for s in data['shapes']:
-                    label = s['label']
-                    points = s['points']
-                    if "visible" in s.keys():
-                        visibles = s['visible']
-                    else:
-                        visibles = [1] * len(points)
-                    line_color = s['line_color']
-                    fill_color = s['fill_color']
-                    shape_type = s.get('shape_type', 'polygon')
-                    shapes.append([label, points, visibles, line_color, fill_color, shape_type])
-
-                for key, value in data.items():
-                    if key not in keys:
-                        otherData[key] = value
 
         except Exception as e:
             raise LabelFileError(e)
 
-        # Only replace data after everything is loaded.
-        self.flags = flags
-        self.shapes = shapes
-        self.imagePath = imagePath
-        self.imageData = imageData
-        self.lineColor = lineColor
-        self.fillColor = fillColor
-        self.filename = filename
-        self.otherData = otherData
-        self.fuzzy = fuzzy
+
 
     @staticmethod
     def _check_image_height_and_width(imageData, imageHeight, imageWidth):
